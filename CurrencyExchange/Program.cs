@@ -4,7 +4,6 @@ using CurrencyExchange.Services.ExternalServices.ExchangeRatesApiIO;
 using CurrencyExchange.Utils.Resiliency;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using Polly;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -37,21 +36,7 @@ builder.Services.AddHttpClient<ExchangeRatesApiIoService>("ExchangeRatesApiIoSer
         Convert.ToDouble(configuration.GetSection("ResiliencyPolicies")["Default:LifeTime"])))
     .AddPolicyHandler(ResiliencyPolicies.GetDefaultRetryPolicy(configuration))
     .AddPolicyHandler(ResiliencyPolicies.GetDefaultCircuitBreakerPolicy(configuration));
-var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(
-    TimeSpan.FromSeconds(10));
-var longTimeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(
-    TimeSpan.FromSeconds(30));
 
-var policyRegistry = builder.Services.AddPolicyRegistry();
-
-policyRegistry.Add("Regular", timeoutPolicy);
-policyRegistry.Add("Long", longTimeoutPolicy);
-
-builder.Services.AddHttpClient("PollyRegistryRegular")
-    .AddPolicyHandlerFromRegistry("Regular");
-
-builder.Services.AddHttpClient("PollyRegistryLong")
-    .AddPolicyHandlerFromRegistry("Long");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

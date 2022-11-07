@@ -1,19 +1,14 @@
 ﻿using CurrencyExchange.DTOs;
-using CurrencyExchange.Services.ExternalServices.ExchangeRatesApiIo;
 using CurrencyExchange.Utils;
-using Microsoft.Extensions.Options;
 
 namespace CurrencyExchange.Services.ExternalServices.ExchangeRatesApiIO;
 
 public class ExchangeRatesApiIoService : IExchangeRatesApiIoService
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IOptionsMonitor<ExchangeRatesApiIoOptions> _exchangeRatesApiIoOptions;
 
-    public ExchangeRatesApiIoService(IHttpClientFactory httpClientFactory,
-        IOptionsMonitor<ExchangeRatesApiIoOptions> exchangeRatesApiIoOptions)
+    public ExchangeRatesApiIoService(IHttpClientFactory httpClientFactory)
     {
-        _exchangeRatesApiIoOptions = exchangeRatesApiIoOptions;
         _httpClientFactory = httpClientFactory;
     }
 

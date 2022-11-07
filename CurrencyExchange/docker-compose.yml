@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    ports:
+     - "5432:5432"
+       
+  redis:
+    image: redis:alpine
+    ports:
+      - "5002:6379"
